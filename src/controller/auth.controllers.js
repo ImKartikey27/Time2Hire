@@ -61,4 +61,52 @@ const logout = asyncHandler(async (req, res) => {
         .json(new ApiResponse(200, "Logout successful"))
 })
 
-export {login, logout}
+const registerAdmin = asyncHandler(async (req, res) => {
+    const {name, email, password} = req.body
+    if(!name || !email || !password) throw new ApiError(400, "All fields are required")
+    
+    const admin = await Admin.findOne({email})
+    if(admin) throw new ApiError(400, "Admin already exists")
+    const newAdmin = await Admin.create({
+        name,
+        email,
+        password
+    })
+    const option = {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+    }
+    return res
+        .status(201)
+        .json(new ApiResponse(201, "Admin created successfully"))
+})
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+    const incomingRefreshToken = req.cookies.refreshToken || req.body.refreshToken
+
+    if(!incomingRefreshToken){
+        throw new ApiError(401, "Refresh Token is required")
+    }
+    try {
+        const decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
+        const admin = await Admin.findById(decodedToken?.id).select("-password -refreshToken")
+        if(!admin) throw new ApiError(401, "Unauthorized")
+        if(incomingRefreshToken!== admin?.refreshToken) throw new ApiError(401, "Invalid refresh token")
+        
+        const {accessToken, refreshToken} = await generateAccessAndRefreshToken(admin._id)
+        const option = {
+            httpOnly: true,
+            secure: process.env.NODE_ENV === "production",
+        }
+        return res
+            .status(200)
+            .cookie("accessToken", accessToken, option)
+            .cookie("refreshToken", refreshToken, option)
+            .json(new ApiResponse(200, {accessToken, refreshToken}, "Access token refreshed successfully"))
+    } catch (error) {
+        throw new ApiError(401, "Something went wrong while refreshing access token")
+    }
+})
+
+
+export {login, logout,registerAdmin}
