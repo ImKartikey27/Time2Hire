@@ -6,8 +6,13 @@ const conversationLogsSchema = new mongoose.Schema({
     ref: "Candidate",
   },
   sender: {
-    type: String,
+    type: string,
+    enum: ['agent', 'candidate'],
     required: true
+  },
+  timestamps: {
+    type: Date,
+    default: Date.now
   },
   message: {
     type: String,
@@ -16,6 +21,17 @@ const conversationLogsSchema = new mongoose.Schema({
   intent_detected: {
     type: String
   },
-}, {timestamps: true})
+  entity_extracted: {
+    type: Object
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+})
 
 export const ConversationLogs = mongoose.model("ConversationLogs", conversationLogsSchema)
