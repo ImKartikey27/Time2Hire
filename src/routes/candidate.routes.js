@@ -6,6 +6,7 @@ import {
     getCandidates,
     updateCandidate,
 } from "../controller/candidate.controllers.js";
+import { verifyJWT } from "../middelwares/auth.middlewares.js";
 
 const router = Router();    
 
@@ -14,8 +15,8 @@ router.route("/get-candidates").get(getCandidates);
 router.route("/get-candidate/:id").get(getCandidateDetail); 
 
 //secured routes
-router.route("/create-candidate").post(createCandidate);
-router.route("/update-candidate/:id").put(updateCandidate);
-router.route("/delete-candidate/:id").delete(deleteCandidate);
+router.route("/create-candidate").post(verifyJWT,createCandidate);
+router.route("/update-candidate/:id").put(verifyJWT,updateCandidate);
+router.route("/delete-candidate/:id").delete(verifyJWT,deleteCandidate);
 
 export default router
