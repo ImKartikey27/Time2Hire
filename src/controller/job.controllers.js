@@ -43,9 +43,18 @@ const createJob = asyncHandler(async (req, res) => {
 
 })
 
+const getJobDetail = asyncHandler(async (req,res)=>{
+    const id = req.params.id
+    const job = await Job.findById(id)
+    if(!job) throw new ApiError(404, "Job not found")
+    return res.status(200).json(new ApiResponse(200, job, "Job fetched successfully"))
+})
+
 
 
 export {
     getJobs,
     createJob,
+    getJobDetail,
+
 }
