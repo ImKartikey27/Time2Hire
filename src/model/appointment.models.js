@@ -11,8 +11,15 @@ const appointmentSchema = new mongoose.Schema({
     ref: "Job",
     required: true
   },
-  scheduled_time: {
-    type: Date,
+  slot: {
+    date: {
+      type: Date,
+      required: true
+    },
+    startTime: {
+      type: String,
+      required: true
+    }
   },
   confirmed: {
     type: Boolean,
