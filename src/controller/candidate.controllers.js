@@ -35,3 +35,46 @@ const createCandidate = asyncHandler(async (req, res) => {
         throw new ApiError(500, error.message)
     }
 })
+
+const getCandidateDetail = asyncHandler(async (req,res)=>{
+    const id = req.params.id
+    const candidate = await Candidate.findById(id)
+    if(!candidate) throw new ApiError(404, "Candidate not found")
+    return res.status(200).json(new ApiResponse(200, candidate, "Candidate fetched successfully"))
+})
+
+const updateCandidate = asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const {name , email , phone , notice_period , current_ctc , expected_ctc} = req.body
+    const candidate = await Candidate.findById(id)
+    if(!candidate) throw new ApiError(404, "Candidate not found")
+    const updateData = {}
+    // Only add fields that are present in the request
+    if(name !== undefined) updateData.name = name
+    if(email !== undefined) updateData.email = email
+    if(phone !== undefined) updateData.phone = phone
+    if(notice_period !== undefined) updateData.notice_period = notice_period
+    if(current_ctc !== undefined) updateData.current_ctc = current_ctc
+    if(expected_ctc !== undefined) updateData.expected_ctc = expected_ctc
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    )
+    return res.status(200).json(new ApiResponse(200, updatedCandidate, "Candidate updated successfully"))
+  })
+
+const deleteCandidate = asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const candidate = await Candidate.findByIdAndDelete(id)
+    if(!candidate) throw new ApiError(404, "Candidate not found")
+    return res.status(200).json(new ApiResponse(200, candidate, "Candidate deleted successfully"))
+  })
+
+export {
+    getCandidates,
+    createCandidate,
+    getCandidateDetail,
+    updateCandidate,
+    deleteCandidate
+}
