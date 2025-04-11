@@ -50,11 +50,35 @@ const getJobDetail = asyncHandler(async (req,res)=>{
     return res.status(200).json(new ApiResponse(200, job, "Job fetched successfully"))
 })
 
-
+const updateJob = asyncHandler(async (req, res) => {
+    const id = req.params.id
+    const { company, title, description, requirements, slots } = req.body
+    
+    const job = await Job.findById(id)
+    if(!job) throw new ApiError(404, "Job not found")
+    
+    const updateData = {}
+    // Only add fields that are present in the request
+    if(company !== undefined) updateData.company = company
+    if(title !== undefined) updateData.title = title
+    if(description !== undefined) updateData.description = description
+    if(requirements !== undefined) updateData.requirements = requirements
+    if(slots !== undefined) updateData.slots = slots
+    
+    const updatedJob = await Job.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    )
+    
+    return res.status(200).json(new ApiResponse(200, updatedJob, "Job updated successfully"))
+  })
 
 export {
     getJobs,
     createJob,
     getJobDetail,
+    updateJob,
+    
 
 }
