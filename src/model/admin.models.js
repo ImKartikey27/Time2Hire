@@ -1,5 +1,6 @@
 import mongoose, {Schema} from "mongoose";
 import bcrypt from "bcrypt"
+import jwt from "jsonwebtoken"
 
 const adminSchema = new mongoose.Schema({
     name: {
@@ -14,6 +15,9 @@ const adminSchema = new mongoose.Schema({
         type: String,
         required: [true, "password is required"]
     },
+    refreshToken: {
+        type: String
+    }
 },{timestamps: true})
 
 adminSchema.pre("save", async function(next){
@@ -25,6 +29,26 @@ adminSchema.pre("save", async function(next){
 
 adminSchema.methods.isPasswordCorrect = async function(password){
     return await bcrypt.compare(password, this.password)
+}
+
+adminSchema.methods.generateAccessToken = function(){
+    return jwt.sign({
+        id: this._id,
+        name: this.name,
+        email: this.email
+    }, 
+    process.env.ACCESS_TOKEN_SECRET, 
+    {expiresIn: ACCESS_TOKEN_EXPIRY }
+    )
+}
+
+adminSchema.methods.generateRefreshToken = function(){
+    return jwt.sign({
+        id: this._id,
+    }, 
+    process.env.REFRESH_TOKEN_SECRET, 
+    {expiresIn: REFRESH_TOKEN_EXPIRY }
+    )
 }
 
 
