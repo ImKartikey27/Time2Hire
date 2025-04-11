@@ -1,8 +1,5 @@
 import express from "express"
 import cors from "cors"
-import { ApiError } from "./utils/ApiError.js"
-import { ApiResponse } from "./utils/ApiResponse.js"
-import { asyncHandler } from "./utils/asyncHandler.js"
 
 const app = express()   
 
@@ -19,6 +16,7 @@ app.use(express.urlencoded({extended: true , limit: "16kb"}))
 app.use(express.static("public"))
 
 // import routes
+import jobRoutes from "./routes/job.routes.js"
 
 
 app.get("/", (req, res) => {
@@ -26,6 +24,7 @@ app.get("/", (req, res) => {
 });
 
 //routes
+app.use("/api/v1/jobs", jobRoutes)
 
 //app.use(errorHandler)
 
