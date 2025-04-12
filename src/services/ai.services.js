@@ -1,6 +1,6 @@
-import {GroqClient} from "groq-sdk"
+import GroqClient from "groq-sdk"
 import  dotenv  from "dotenv";
-import PromptUtils from "../utils/prompt.utils";
+import PromptUtils from "../utils/prompt.utils.js";
 
 dotenv.config();
 

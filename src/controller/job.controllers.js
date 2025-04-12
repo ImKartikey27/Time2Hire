@@ -1,7 +1,7 @@
-import { asyncHandler } from "../utils/asyncHandler";
-import { ApiError } from "../utils/ApiError";
-import { ApiResponse } from "../utils/ApiResponse";
-import { Job } from "../model/jobs.models";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { ApiError } from "../utils/ApiError.js";
+import { ApiResponse } from "../utils/ApiResponse.js";
+import { Job } from "../model/jobs.models.js";
 
 const getJobs = asyncHandler(async (req, res) => {
     const jobs = await Job.find()

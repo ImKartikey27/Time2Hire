@@ -1,8 +1,8 @@
-import EntityExtractor from '../services/entity-extractor';
-import AIService from '../services/ai.services';
-import { STATES, getNextState } from './states';
-import { getPrompt } from '../utils/prompt.utils';
-import Candidate from '../models/candidate.model';
+import {EntityExtractor} from '../services/entity-extractor.services.js';
+import AIService from '../services/ai.services.js';
+import { STATES, getNextState } from './states.js';
+import  getPrompt  from '../utils/prompt.utils.js';
+import Candidate from '../model/candidate.models.js';
 
 class VoiceAgent {
   constructor() {

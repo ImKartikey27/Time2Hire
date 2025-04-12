@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken"
-import { Admin } from "../model/admin.models"
-import { ApiError } from "../utils/ApiError"
-import { asyncHandler } from "../utils/asyncHandler"
+import { Admin } from "../model/admin.models.js"
+import { ApiError } from "../utils/ApiError.js"
+import { asyncHandler } from "../utils/asyncHandler.js"
 
 export const verifyJWT = asyncHandler(async (req, _ , next) => {
     const token = req.cookies.accessToken || req.headers.authorization?.split(" ")[1]

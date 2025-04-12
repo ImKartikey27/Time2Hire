@@ -1,5 +1,5 @@
 import voiceAgent from "../voice-agents/voice-agent.js";
-import Candidate from "../models/candidate.model.js";
+import Candidate from "../model/candidate.models.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { ApiError } from "../utils/ApiError.js";

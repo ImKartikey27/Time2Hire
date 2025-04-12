@@ -1,15 +1,15 @@
-import express from 'express';
-import { startConversation, processResponse, getCandidate } from '../controllers/voiceController.js';
+import {Router} from 'express';
+import { startConversation, processResponse, getCandidate } from '../controller/voice.controllers.js';
 
-const router = express.Router();
+const router = Router();
 
 // Initialize conversation endpoint
-router.post('/voice/start', startConversation);
+router.route("/voice/start").post(startConversation);
 
 // Process response endpoint
-router.post('/voice/respond', processResponse);
+router.route("/voice/response").post( processResponse);
 
 // Get candidate data endpoint
-router.get('/voice/candidate/:id', getCandidate);
+router.route("/voice/candidate/:id").get(getCandidate);
 
 export default router;
