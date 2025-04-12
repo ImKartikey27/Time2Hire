@@ -29,6 +29,8 @@ Everything you interact with is built using Node.js, Express, and Groq's LLaMA-b
 
 ## Architecture
 
+![Time2Hire Architecture](./public/images/architecture.png)
+
 The system architecture consists of the following components:
 
 - **API Server**: Handles all client requests and serves as the central hub
