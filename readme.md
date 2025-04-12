@@ -29,7 +29,7 @@ Everything you interact with is built using Node.js, Express, and Groq's LLaMA-b
 
 ## Architecture
 
-![Time2Hire Architecture](./public/images/architecture.png)
+![Time2Hire Architecture](./public/images/1234.png)
 
 The system architecture consists of the following components:
 
