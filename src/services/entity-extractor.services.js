@@ -99,12 +99,12 @@ class EntityExtractor {
     }
 
     _parseDateFromMatch(match){
-        const Dateutils = require("../utils/date.utils")
+        const Dateutils = require("../utils/date.utils.js")
         return Dateutils.parseDateFromMatch(match);
     }
 
     _parseTimeFromMatch(match){
-        const Dateutils = require("../utils/date.utils")
+        const Dateutils = require("../utils/date.utils.js")
         return Dateutils.parseTimeFromMatch(match);
     }
 }
