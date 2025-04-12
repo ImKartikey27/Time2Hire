@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Voice Agent Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        .chat-container {
+            height: 400px;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding: 10px;
+            background-color: #f8f9fa;
+        }
+        .message {
+            margin-bottom: 10px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            max-width: 80%;
+        }
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            margin-left: auto;
+        }
+        .agent-message {
+            background-color: #e9ecef;
+            color: #212529;
+        }
+    </style>
+</head>
+<body>
+    <div class="container mt-5">
+        <h1 class="mb-4">Voice Agent Demo</h1>
+        
+        <div id="setup-container" class="mb-4">
+            <h3>Candidate Information</h3>
+            <div class="row g-3">
+                <div class="col-md-4">
+                    <input type="text" id="candidate-name" class="form-control" placeholder="Candidate Name">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="company-name" class="form-control" placeholder="Company Name">
+                </div>
+                <div class="col-md-4">
+                    <input type="text" id="position" class="form-control" placeholder="Position">
+                </div>
+                <div class="col-12">
+                    <button id="start-btn" class="btn btn-primary">Start Conversation</button>
+                    <button id="resume-btn" class="btn btn-secondary">Resume Conversation</button>
+                    <input type="text" id="candidate-id" class="form-control d-inline-block w-25" placeholder="Candidate ID for Resume">
+                </div>
+            </div>
+        </div>
+        
+        <div class="chat-container mb-3" id="chat-container"></div>
+        
+        <div class="input-group">
+            <input type="text" id="user-input" class="form-control" placeholder="Type your response...">
+            <button class="btn btn-primary" id="send-btn">Send</button>
+        </div>
+        
+        <div class="mt-4">
+            <h4>Extracted Information</h4>
+            <pre id="extracted-info" class="bg-light p-3"></pre>
+        </div>
+    </div>
+
+    <script>
+        let candidateId = null;
+        let currentState = null;
+        
+        document.getElementById('start-btn').addEventListener('click', startConversation);
+        document.getElementById('resume-btn').addEventListener('click', resumeConversation);
+        document.getElementById('send-btn').addEventListener('click', sendMessage);
+        document.getElementById('user-input').addEventListener('keydown', e => {
+            if (e.key === 'Enter') sendMessage();
+        });
+        
+        async function startConversation() {
+            const name = document.getElementById('candidate-name').value;
+            const company = document.getElementById('company-name').value;
+            const position = document.getElementById('position').value;
+            
+            if (!name || !company || !position) {
+                alert('Please fill in all candidate information fields.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/voice/start', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        candidateData: { name, company, position }
+                    }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    candidateId = data.candidateId;
+                    currentState = data.state;
+                    
+                    // Clear chat
+                    document.getElementById('chat-container').innerHTML = '';
+                    
+                    // Add agent messages to chat
+                    addMessage(data.message, 'agent');
+                    addMessage(data.nextPrompt, 'agent');
+                    
+                    // Enable user input
+                    document.getElementById('user-input').disabled = false;
+                    document.getElementById('send-btn').disabled = false;
+                } else {
+                    alert(`Error: ${data.error || 'Failed to start conversation'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Check console for details.');
+            }
+        }
+        
+        async function resumeConversation() {
+            const id = document.getElementById('candidate-id').value;
+            
+            if (!id) {
+                alert('Please enter a candidate ID to resume conversation.');
+                return;
+            }
+            
+            try {
+                const response = await fetch('/api/voice/resume', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        candidateId: id
+                    }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    candidateId = data.candidateId;
+                    currentState = data.state;
+                    
+                    // Clear chat
+                    document.getElementById('chat-container').innerHTML = '';
+                    
+                    // Add conversation history to chat
+                    if (data.conversationHistory && data.conversationHistory.length > 0) {
+                        data.conversationHistory.forEach(msg => {
+                            addMessage(msg.content, msg.role === 'assistant' ? 'agent' : 'user');
+                        });
+                    }
+                    
+                    // Add next prompt
+                    if (data.nextPrompt) {
+                        addMessage(data.nextPrompt, 'agent');
+                    }
+                    
+                    // Enable user input
+                    document.getElementById('user-input').disabled = false;
+                    document.getElementById('send-btn').disabled = false;
+                } else {
+                    alert(`Error: ${data.error || 'Failed to resume conversation'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Check console for details.');
+            }
+        }
+        
+        async function sendMessage() {
+            const userInput = document.getElementById('user-input').value.trim();
+            
+            if (!userInput || !candidateId) return;
+            
+            // Add user message to chat
+            addMessage(userInput, 'user');
+            
+            // Clear input field
+            document.getElementById('user-input').value = '';
+            
+            try {
+                const response = await fetch('/api/voice/respond', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        userInput,
+                        candidateId
+                    }),
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    // Add agent message to chat
+                    addMessage(data.message, 'agent');
+                    
+                    // Update current state
+                    currentState = data.state;
+                    
+                    // Display extracted entities
+                    document.getElementById('extracted-info').textContent = 
+                        JSON.stringify(data.extractedEntities, null, 2);
+                    
+                    // Disable inputs if conversation is done
+                    if (data.done) {
+                        document.getElementById('user-input').disabled = true;
+                        document.getElementById('send-btn').disabled = true;
+                        alert('Conversation completed! Check the extracted information.');
+                    }
+                } else {
+                    alert(`Error: ${data.error || 'Failed to process response'}`);
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                alert('An error occurred. Check console for details.');
+            }
+        }
+        
+        function addMessage(content, sender) {
+            const chatContainer = document.getElementById('chat-container');
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message ${sender === 'user' ? 'user-message' : 'agent-message'}`;
+            messageDiv.textContent = content;
+            chatContainer.appendChild(messageDiv);
+            
+            // Scroll to bottom
+            chatContainer.scrollTop = chatContainer.scrollHeight;
+        }
+    </script>
+</body>
+</html>
