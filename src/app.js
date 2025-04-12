@@ -27,6 +27,10 @@ app.get("/", (req, res) => {
 
 //routes
 app.use("/api/v1/jobs", jobRoutes)
+app.use("/api/v1/auth", authRoutes)
+app.use("/api/v1/candidates", candidateRoutes)
+app.use("/api/v1/voice", voiceRoutes)
+app.use("/api/v1/appointment", appointmentRoutes)
 
 //app.use(errorHandler)
 
