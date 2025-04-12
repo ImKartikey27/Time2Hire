@@ -83,4 +83,4 @@ class DateUtils {
     }
 }
 
-module.exports = DateUtils
+export default DateUtils

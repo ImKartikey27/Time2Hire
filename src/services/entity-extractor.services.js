@@ -109,4 +109,7 @@ class EntityExtractor {
     }
 }
 
-module.exports = {EntityExtractor, entityPatterns}
+export {
+    EntityExtractor,
+    entityPatterns
+}
