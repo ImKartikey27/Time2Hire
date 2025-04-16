@@ -12,7 +12,11 @@ const getJobs = asyncHandler(async (req, res) => {
 const createJob = asyncHandler(async (req, res) => {
     const {company, title, description, requirements, slots} = req.body
     //validation
-    if([company, title, description, requirements, slots].some((field) => field?.trim()=== "")){
+    if([company, title, description, requirements].some((field) => field?.trim()=== "")
+        || !Array.isArray(slots) || 
+    slots.length === 0 || 
+    slots.some(slot => !slot.date || !slot.startTime || slot.startTime.trim() === "")
+    ){
         throw new ApiError(400, "All fields are required")
     }
 
