@@ -21,7 +21,6 @@ const createAppointment = asyncHandler(async (req, res) => {
     if (isNaN(slotDate)) {
       throw new ApiError(400, "Invalid date format for slot.date");
     }
-  
     // Check for existing appointment with same candidate, job, and slot time
     const existedAppointment = await Appointment.findOne({
       candidate_id,
@@ -29,20 +28,22 @@ const createAppointment = asyncHandler(async (req, res) => {
       "slot.date": slotDate,
       "slot.startTime": slot.startTime,
     });
-  
+    
     if (existedAppointment) {
       throw new ApiError(400, "Appointment already exists for this slot");
     }
   
     // Create appointment
     const appointment = await Appointment.create({
-      candidate_id,
-      job_id,
+      candidate: candidate_id,
+      job: job_id,
       slot: {
         date: slotDate,
         startTime: slot.startTime,
       },
     });
+    console.log("created an appointment");
+    
   
     return res
       .status(201)
