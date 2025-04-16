@@ -2,6 +2,7 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiError } from "../utils/ApiError.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { Admin } from "../model/admin.models.js";
+import jwt from "jsonwebtoken"
 
 const generateAccessAndRefreshToken = async( admin_id ) => {
     try {
@@ -89,7 +90,7 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
     }
     try {
         const decodedToken = jwt.verify(incomingRefreshToken,process.env.REFRESH_TOKEN_SECRET)
-        const admin = await Admin.findById(decodedToken?.id).select("-password -refreshToken")
+        const admin = await Admin.findById(decodedToken?.id).select("-password")
         if(!admin) throw new ApiError(401, "Unauthorized")
         if(incomingRefreshToken!== admin?.refreshToken) throw new ApiError(401, "Invalid refresh token")
         
@@ -104,6 +105,8 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
             .cookie("refreshToken", refreshToken, option)
             .json(new ApiResponse(200, {accessToken, refreshToken}, "Access token refreshed successfully"))
     } catch (error) {
+        console.log("refresh Token", error);
+        
         throw new ApiError(401, "Something went wrong while refreshing access token")
     }
 })
