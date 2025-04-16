@@ -68,44 +68,48 @@ const getCandidateDetail = asyncHandler(async (req, res) => {
 });
 
 const updateCandidate = asyncHandler(async (req, res) => {
-  const id = req.params.id;
-  const { 
-    name, 
-    company, 
-    position, 
-    isInterested, 
-    noticePeriod, 
-    currentSalary, 
-    expectedSalary, 
-    rawAvailability,
-    interviewDateTime,
-    bookingConfirmed
-  } = req.body;
-  
-  const candidate = await Candidate.findById(id);
-  if (!candidate) throw new ApiError(404, "Candidate not found");
-  
-  const updateData = {};
-  
-  // Only add fields that are present in the request
-  if (name !== undefined) updateData.name = name;
-  if (company !== undefined) updateData.company = company;
-  if (position !== undefined) updateData.position = position;
-  if (isInterested !== undefined) updateData.isInterested = isInterested;
-  if (noticePeriod !== undefined) updateData.noticePeriod = noticePeriod;
-  if (currentSalary !== undefined) updateData.currentSalary = currentSalary;
-  if (expectedSalary !== undefined) updateData.expectedSalary = expectedSalary;
-  if (rawAvailability !== undefined) updateData.rawAvailability = rawAvailability;
-  if (interviewDateTime !== undefined) updateData.interviewDateTime = interviewDateTime;
-  if (bookingConfirmed !== undefined) updateData.bookingConfirmed = bookingConfirmed;
-  
-  const updatedCandidate = await Candidate.findByIdAndUpdate(
-    id,
-    updateData,
-    { new: true, runValidators: true }
-  );
-  
-  return res.status(200).json(new ApiResponse(200, updatedCandidate, "Candidate updated successfully"));
+try {
+    const id = req.params.id;
+    const { 
+      name, 
+      company, 
+      position, 
+      isInterested, 
+      noticePeriod, 
+      currentSalary, 
+      expectedSalary, 
+      rawAvailability,
+      interviewDateTime,
+      bookingConfirmed
+    } = req.body;
+    
+    const candidate = await Candidate.findById(id);
+    if (!candidate) throw new ApiError(404, "Candidate not found");
+    
+    const updateData = {};
+    
+    // Only add fields that are present in the request
+    if (name !== undefined) updateData.name = name;
+    if (company !== undefined) updateData.company = company;
+    if (position !== undefined) updateData.position = position;
+    if (isInterested !== undefined) updateData.isInterested = isInterested;
+    if (noticePeriod !== undefined) updateData.noticePeriod = noticePeriod;
+    if (currentSalary !== undefined) updateData.currentSalary = currentSalary;
+    if (expectedSalary !== undefined) updateData.expectedSalary = expectedSalary;
+    if (rawAvailability !== undefined) updateData.rawAvailability = rawAvailability;
+    if (interviewDateTime !== undefined) updateData.interviewDateTime = interviewDateTime;
+    if (bookingConfirmed !== undefined) updateData.bookingConfirmed = bookingConfirmed;
+    
+    const updatedCandidate = await Candidate.findByIdAndUpdate(
+      id,
+      updateData,
+      { new: true, runValidators: true }
+    );
+    
+    return res.status(200).json(new ApiResponse(200, updatedCandidate, "Candidate updated successfully"));
+} catch (error) {
+    throw new ApiError(500, error.message);
+}
 });
 
 const deleteCandidate = asyncHandler(async (req, res) => {
