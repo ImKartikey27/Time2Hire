@@ -1,0 +1,1317 @@
+{
+	"info": {
+		"_postman_id": "57951291-04cb-4885-be0a-aff0a3a8c574",
+		"name": "Time2Hire",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38405054"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "registeradmin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response body should have the required fields as per the schema validation\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('username');",
+									"    pm.expect(responseData).to.have.property('email');",
+									"    pm.expect(responseData).to.have.property('password');",
+									"    pm.expect(responseData).to.have.property('role');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"Sambhav\",\n  \"email\": \"Sambhav@example.com\",\n  \"password\": \"2011000345\"\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}auth/register-admin",
+							"host": [
+								"{{time2Hire}}auth"
+							],
+							"path": [
+								"register-admin"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "login",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('token');",
+									"    pm.expect(responseData.token).to.be.a('string');",
+									"    pm.expect(responseData).to.have.property('user');",
+									"    pm.expect(responseData.user).to.be.an('object');",
+									"    pm.expect(responseData.user).to.have.property('id');",
+									"    pm.expect(responseData.user.id).to.be.a('number');",
+									"    pm.expect(responseData.user).to.have.property('username');",
+									"    pm.expect(responseData.user.username).to.be.a('string');",
+									"    pm.expect(responseData.user).to.have.property('email');",
+									"    pm.expect(responseData.user.email).to.be.a('string');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"email\":\"kartikey@example.com\",\n    \"password\":\"2011000345\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}auth/login",
+							"host": [
+								"{{time2Hire}}auth"
+							],
+							"path": [
+								"login"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "RefreshAccessToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema for the access token refresh endpoint\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('accessToken');",
+									"    pm.expect(responseData.accessToken).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('expiresIn');",
+									"    pm.expect(responseData.expiresIn).to.be.a('number');",
+									"",
+									"    pm.expect(responseData).to.have.property('tokenType');",
+									"    pm.expect(responseData.tokenType).to.be.a('string');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "jwt",
+							"jwt": [
+								{
+									"key": "addTokenTo",
+									"value": "header",
+									"type": "string"
+								},
+								{
+									"key": "algorithm",
+									"value": "HS256",
+									"type": "string"
+								},
+								{
+									"key": "isSecretBase64Encoded",
+									"value": false,
+									"type": "boolean"
+								},
+								{
+									"key": "payload",
+									"value": "{}",
+									"type": "string"
+								},
+								{
+									"key": "headerPrefix",
+									"value": "Bearer",
+									"type": "string"
+								},
+								{
+									"key": "queryParamKey",
+									"value": "token",
+									"type": "string"
+								},
+								{
+									"key": "header",
+									"value": "{}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}auth/refresh-access-token",
+							"host": [
+								"{{time2Hire}}auth"
+							],
+							"path": [
+								"refresh-access-token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "logout",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('message');",
+									"    pm.expect(responseData.message).to.be.a('string');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}auth/logout",
+							"host": [
+								"{{time2Hire}}auth"
+							],
+							"path": [
+								"logout"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Candidate",
+			"item": [
+				{
+					"name": "get-all-candidates",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response schema for 'candidates' endpoint\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData).to.have.property('candidates').that.is.an('array');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}candidates/get-candidates",
+							"host": [
+								"{{time2Hire}}candidates"
+							],
+							"path": [
+								"get-candidates"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-candidateByID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"  });",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body for the candidate data\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('id');",
+									"    pm.expect(responseData).to.have.property('name');",
+									"    pm.expect(responseData).to.have.property('email');",
+									"    pm.expect(responseData).to.have.property('phone');",
+									"    pm.expect(responseData).to.have.property('skills');",
+									"    pm.expect(responseData).to.have.property('experience');",
+									"    pm.expect(responseData).to.have.property('education');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}candidates/get-candidate/67ff679a1805c2b60b9c59bc",
+							"host": [
+								"{{time2Hire}}candidates"
+							],
+							"path": [
+								"get-candidate",
+								"67ff679a1805c2b60b9c59bc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema for the created candidate object\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.be.a('string');",
+									"    pm.expect(responseData.name).to.be.a('string');",
+									"    pm.expect(responseData.email).to.be.a('string');",
+									"    pm.expect(responseData.age).to.be.a('number');",
+									"    pm.expect(responseData.skills).to.be.an('array');",
+									"    pm.expect(responseData.skills.length).to.be.at.least(1);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"name\": \"Isabella Chen\",\n    \"company\": \"MetaLogic\",\n    \"position\": \"Business Analyst\"\n\n  }",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}candidates/create-candidate",
+							"host": [
+								"{{time2Hire}}candidates"
+							],
+							"path": [
+								"create-candidate"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update-candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema for the updated candidate data\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.id).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.name).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.email).to.exist.and.to.match(/^[\\w-\\.]+@([\\w-]+\\.)+[\\w-]{2,4}$/);",
+									"    pm.expect(responseData.phone).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.age).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.skills).to.exist.and.to.be.an('array');",
+									"    responseData.skills.forEach(function(skill) {",
+									"        pm.expect(skill).to.be.a('string');",
+									"    });",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"company\": \"interactly.video\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}candidates/update-candidate/67ff679a1805c2b60b9c59bc",
+							"host": [
+								"{{time2Hire}}candidates"
+							],
+							"path": [
+								"update-candidate",
+								"67ff679a1805c2b60b9c59bc"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-candidate",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(300);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema for the deleted candidate ID\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.deletedCandidateId).to.exist.and.to.be.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify that the response body does not contain any sensitive information\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.not.include.keys('ssn', 'password', 'creditCardNumber', 'securityQuestions');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Check if the response message is as expected\", function () {",
+									"    pm.expect(pm.response.text()).to.include(\"Candidate deleted successfully\");",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}candidates/delete-candidate/67ff679a1805c2b60b9c59bc",
+							"host": [
+								"{{time2Hire}}candidates"
+							],
+							"path": [
+								"delete-candidate",
+								"67ff679a1805c2b60b9c59bc"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Job",
+			"item": [
+				{
+					"name": "Get-jobs",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('_id');",
+									"    pm.expect(responseData).to.have.property('company');",
+									"    pm.expect(responseData).to.have.property('title');",
+									"    pm.expect(responseData).to.have.property('description');",
+									"    pm.expect(responseData).to.have.property('requirements');",
+									"    pm.expect(responseData).to.have.property('slots');",
+									"    pm.expect(responseData).to.have.property('createdAt');",
+									"    pm.expect(responseData).to.have.property('updatedAt');",
+									"    pm.expect(responseData).to.have.property('__v');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Slots array contains elements with required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data).to.be.an('array').that.is.not.empty;",
+									"    responseData.data.forEach(function(job) {",
+									"        pm.expect(job.slots).to.be.an('array').that.is.not.empty;",
+									"        job.slots.forEach(function(slot) {",
+									"            pm.expect(slot).to.have.property('date');",
+									"            pm.expect(slot).to.have.property('startTime');",
+									"            pm.expect(slot).to.have.property('_id');",
+									"        });",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}jobs/get-jobs",
+							"host": [
+								"{{time2Hire}}jobs"
+							],
+							"path": [
+								"get-jobs"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-jobByID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('jobId');",
+									"    pm.expect(responseData.jobId).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('jobTitle');",
+									"    pm.expect(responseData.jobTitle).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('jobDescription');",
+									"    pm.expect(responseData.jobDescription).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('jobLocation');",
+									"    pm.expect(responseData.jobLocation).to.be.an('object');",
+									"",
+									"    pm.expect(responseData.jobLocation).to.have.property('city');",
+									"    pm.expect(responseData.jobLocation.city).to.be.a('string');",
+									"",
+									"    pm.expect(responseData.jobLocation).to.have.property('state');",
+									"    pm.expect(responseData.jobLocation.state).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('jobType');",
+									"    pm.expect(responseData.jobType).to.be.a('string');",
+									"",
+									"    pm.expect(responseData).to.have.property('jobCategory');",
+									"    pm.expect(responseData.jobCategory).to.be.a('string');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}jobs/get-job/67ffed4b57024dfd41840048",
+							"host": [
+								"{{time2Hire}}jobs"
+							],
+							"path": [
+								"get-job",
+								"67ffed4b57024dfd41840048"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create-job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 500ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('jobId');",
+									"    pm.expect(responseData).to.have.property('title');",
+									"    pm.expect(responseData).to.have.property('description');",
+									"    pm.expect(responseData).to.have.property('location');",
+									"    pm.expect(responseData).to.have.property('salary');",
+									"    pm.expect(responseData).to.have.property('requirements');",
+									"    pm.expect(responseData).to.have.property('postedBy');",
+									"    pm.expect(responseData.postedBy).to.be.an('object');",
+									"    pm.expect(responseData.postedBy).to.have.property('name');",
+									"    pm.expect(responseData.postedBy).to.have.property('email');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"company\": \"Innovexa Solutions\",\n  \"title\": \"Backend Engineer\",\n  \"description\": \"Join our backend team to design and implement scalable APIs and services for enterprise applications.\",\n  \"requirements\": \"Strong knowledge of Node.js, Express, and MongoDB. Familiarity with Docker and CI/CD pipelines is a plus.\",\n  \"slots\": [\n    {\n      \"date\": \"2025-04-22T00:00:00.000Z\",\n      \"startTime\": \"09:30 AM\"\n    },\n    {\n      \"date\": \"2025-04-23T00:00:00.000Z\",\n      \"startTime\": \"01:00 PM\"\n    }\n  ]\n}\n",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}jobs/create-job",
+							"host": [
+								"{{time2Hire}}jobs"
+							],
+							"path": [
+								"create-job"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update-Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('jobId');",
+									"    pm.expect(responseData).to.have.property('jobTitle');",
+									"    pm.expect(responseData).to.have.property('jobDescription');",
+									"    pm.expect(responseData).to.have.property('jobLocation');",
+									"    pm.expect(responseData).to.have.property('jobType');",
+									"    pm.expect(responseData).to.have.property('jobCategory');",
+									"    pm.expect(responseData).to.have.property('jobStatus');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"DevOps Engineer\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}jobs/update-job/67ffed4b57024dfd41840048",
+							"host": [
+								"{{time2Hire}}jobs"
+							],
+							"path": [
+								"update-job",
+								"67ffed4b57024dfd41840048"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete- Job",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the schema of the response body\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('message');",
+									"    pm.expect(responseData).to.have.property('success');",
+									"    pm.expect(responseData.message).to.be.a('string');",
+									"    pm.expect(responseData.success).to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}jobs/delete-job/67ffed4b57024dfd41840048",
+							"host": [
+								"{{time2Hire}}jobs"
+							],
+							"path": [
+								"delete-job",
+								"67ffed4b57024dfd41840048"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Appointment",
+			"item": [
+				{
+					"name": "create-Appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 201\", function () {",
+									"  pm.expect(pm.response.code).to.equal(201);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response has the required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.candidate).to.exist;",
+									"    pm.expect(responseData.job).to.exist;",
+									"    pm.expect(responseData.slot).to.exist;",
+									"    pm.expect(responseData.confirmed).to.exist;",
+									"    pm.expect(responseData._id).to.exist;",
+									"    pm.expect(responseData.createdAt).to.exist;",
+									"    pm.expect(responseData.updatedAt).to.exist;",
+									"    pm.expect(responseData.__v).to.exist;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Date in slot is in a valid date format\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.slot.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Start time in slot is in a valid time format\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData.data.slot.startTime).to.match(/^\\d{2}:\\d{2}$/);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"candidate_id\": \"67ff67791805c2b60b9c59b4\",\n    \"job_id\": \"67ffebcd2ebc08a434856a91\",\n    \"slot\": {\n      \"date\": \"2025-04-20T00:00:00.000Z\",\n      \"startTime\": \"10:00 AM\"\n    }\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}appointment/create-appointment",
+							"host": [
+								"{{time2Hire}}appointment"
+							],
+							"path": [
+								"create-appointment"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get-Appoitment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the response schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('statusCode');",
+									"    pm.expect(responseData).to.have.property('data').that.is.an('object');",
+									"    pm.expect(responseData.data).to.have.property('slot').that.is.an('object');",
+									"    pm.expect(responseData.data.slot).to.have.property('date');",
+									"    pm.expect(responseData.data.slot).to.have.property('startTime');",
+									"    pm.expect(responseData.data).to.have.property('_id');",
+									"    pm.expect(responseData.data).to.have.property('candidate');",
+									"    pm.expect(responseData.data).to.have.property('job');",
+									"    pm.expect(responseData.data).to.have.property('confirmed');",
+									"    pm.expect(responseData.data).to.have.property('createdAt');",
+									"    pm.expect(responseData.data).to.have.property('updatedAt');",
+									"    pm.expect(responseData.data).to.have.property('__v');",
+									"    pm.expect(responseData).to.have.property('message');",
+									"    pm.expect(responseData).to.have.property('success');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}appointment/get-appointment/67fff8a6e968e3c171ab4bdd",
+							"host": [
+								"{{time2Hire}}appointment"
+							],
+							"path": [
+								"get-appointment",
+								"67fff8a6e968e3c171ab4bdd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "get-AllAppointments",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the response schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData).to.have.property('statusCode');",
+									"    pm.expect(responseData).to.have.property('data').that.is.an('array');",
+									"    pm.expect(responseData).to.have.property('message');",
+									"    pm.expect(responseData).to.have.property('success');",
+									"    ",
+									"    responseData.data.forEach(function(appointment) {",
+									"        pm.expect(appointment).to.have.property('slot').that.is.an('object');",
+									"        pm.expect(appointment).to.have.property('_id');",
+									"        pm.expect(appointment).to.have.property('candidate');",
+									"        pm.expect(appointment).to.have.property('job');",
+									"        pm.expect(appointment).to.have.property('confirmed').that.is.a('boolean');",
+									"        pm.expect(appointment).to.have.property('createdAt');",
+									"        pm.expect(appointment).to.have.property('updatedAt');",
+									"        pm.expect(appointment).to.have.property('__v').that.is.a('number');",
+									"    });",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(500);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}appointment/get-appointments",
+							"host": [
+								"{{time2Hire}}appointment"
+							],
+							"path": [
+								"get-appointments"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updateAppointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the 'slot' object in the response\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.have.property('slot').that.is.an('object');",
+									"    pm.expect(responseData.data.slot).to.have.property('date').that.is.a('string');",
+									"    pm.expect(responseData.data.slot).to.have.property('startTime').that.is.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Candidate and job fields should not be empty\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data.candidate).to.exist.and.to.not.be.empty;",
+									"    pm.expect(responseData.data.job).to.exist.and.to.not.be.empty;",
+									"});",
+									"",
+									"",
+									"pm.test(\"Ensure updatedAt field is in a valid date format\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.data.updatedAt).to.match(/^\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}.\\d{3}Z$/);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"confirmed\" : \"true\"\n\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}appointment/update-appointment/67fff8a6e968e3c171ab4bdd",
+							"host": [
+								"{{time2Hire}}appointment"
+							],
+							"path": [
+								"update-appointment",
+								"67fff8a6e968e3c171ab4bdd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete-appointment",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.response.to.have.status(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Verify the response content type is 'application/json'\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the structure of the 'data' object in the response\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data.slot).to.be.an('object');",
+									"    pm.expect(responseData.data.slot.date).to.be.a('string');",
+									"    pm.expect(responseData.data.slot.startTime).to.be.a('string');",
+									"    pm.expect(responseData.data._id).to.be.a('string');",
+									"    pm.expect(responseData.data.candidate).to.be.a('string');",
+									"    pm.expect(responseData.data.job).to.be.a('string');",
+									"    pm.expect(responseData.data.confirmed).to.be.a('boolean');",
+									"    pm.expect(responseData.data.createdAt).to.be.a('string');",
+									"    pm.expect(responseData.data.updatedAt).to.be.a('string');",
+									"    pm.expect(responseData.data.__v).to.be.a('number');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}appointment/delete-appointment/67fff8a6e968e3c171ab4bdd",
+							"host": [
+								"{{time2Hire}}appointment"
+							],
+							"path": [
+								"delete-appointment",
+								"67fff8a6e968e3c171ab4bdd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Voice-Controller",
+			"item": [
+				{
+					"name": "get candidate detail by id",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"  pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the data object schema with required fields\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data).to.include.all.keys('_id', 'name', 'company', 'position', 'bookingConfirmed', 'conversationHistory', 'createdAt', 'updatedAt', '__v');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}voice/candidate/67ff678d1805c2b60b9c59b8",
+							"host": [
+								"{{time2Hire}}voice"
+							],
+							"path": [
+								"candidate",
+								"67ff678d1805c2b60b9c59b8"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "start conversation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is less than 200ms\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the response schema for statusCode, data, message, and success properties\", function () {",
+									"    const responseData = pm.response.json();",
+									"    ",
+									"    pm.expect(responseData).to.be.an('object');",
+									"    pm.expect(responseData.statusCode).to.exist.and.to.be.a('number');",
+									"    pm.expect(responseData.data).to.exist.and.to.be.an('object');",
+									"    pm.expect(responseData.message).to.exist.and.to.be.a('string');",
+									"    pm.expect(responseData.success).to.exist.and.to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"url": {
+							"raw": "{{time2Hire}}voice/start/67ff678d1805c2b60b9c59b8",
+							"host": [
+								"{{time2Hire}}voice"
+							],
+							"path": [
+								"start",
+								"67ff678d1805c2b60b9c59b8"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "time2Hire",
+			"value": "http://localhost:8000/api/v1/",
+			"type": "default"
+		}
+	]
+}

@@ -133,6 +133,20 @@ gulp watch
 4. Push to the branch (`git push origin feature/amazing-feature`)
 5. Open a Pull Request
 
+## 🧪 API Testing with Postman
+
+- **Postman Collection**: [Download here](./public/Time2Hire.postman_collection.json)
+- Import this collection into Postman to test all available API endpoints.
+- Features included:
+  - Pre-request scripts for automatic token generation
+  - Automated tests for response status codes and data validation
+
+### 🔧 How to Use
+1. Open **Postman**
+2. Click on **Import** and upload `Time2Hire.postman_collection.json`
+3. Run individual endpoints or use the **Collection Runner** to test them all at once
+4. Check the **Tests tab** to view validation results
+
 **Free Software, Hell Yeah!**
 
 [//]: # (These are reference links used in the body of this note and get stripped out when the markdown processor does its job. There is no need to format nicely because it shouldn't be seen. Thanks SO - http://stackoverflow.com/questions/4823468/store-comments-in-markdown-syntax)
