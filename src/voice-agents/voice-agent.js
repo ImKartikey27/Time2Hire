@@ -1,7 +1,7 @@
 import {EntityExtractor} from '../services/entity-extractor.services.js';
 import AIService from '../services/ai.services.js';
 import { STATES, getNextState } from './states.js';
-import  getPrompt  from '../utils/prompt.utils.js';
+import  PromptUtils  from '../utils/prompt.utils.js';
 import Candidate from '../model/candidate.models.js';
 
 class VoiceAgent {
@@ -26,19 +26,25 @@ class VoiceAgent {
       
       this.currentState = this.states.GREETING;
       this.conversationHistory = [];
+
       
-      const greeting = getPrompt(this.states.GREETING, {
-        name: this.candidateData.name,
-        company: this.candidateData.company,
-        position: this.candidateData.position
-      });
+      const greeting = PromptUtils.createSystemPrompt(
+        this.candidateData,
+        this.states.GREETING,
+        this.states.INTEREST_CHECK,
+        {} // or appropriate extracted entities
+      );
       
       this.addToHistory('assistant', greeting);
       
       return {
         message: greeting,
         state: this.currentState,
-        nextPrompt: getPrompt(this.states.INTEREST_CHECK),
+        nextPrompt: PromptUtils.createSystemPrompt(this.candidateData,
+          this.states.INTEREST_CHECK,
+          this.states.NOTICE_PERIOD,
+          {}
+        ),
         candidateId: this.candidateData._id
       };
     } catch (error) {
@@ -104,11 +110,11 @@ class VoiceAgent {
       let nextPrompt = '';
       
       if (nextState === this.states.CONFIRM_BOOKING && this.candidateData.interviewDateTime) {
-        nextPrompt = getPrompt(nextState, {
+        nextPrompt = PromptUtils(nextState, {
           dateTime: this.candidateData.interviewDateTime
         });
       } else {
-        nextPrompt = getPrompt(nextState);
+        nextPrompt = PromptUtils(nextState);
       }
       
       // Add AI response to history

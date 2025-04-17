@@ -4,12 +4,12 @@ import { startConversation, processResponse, getCandidate } from '../controller/
 const router = Router();
 
 // Initialize conversation endpoint
-router.route("/voice/start").post(startConversation);
+router.route("/start/:id").post(startConversation);
 
 // Process response endpoint
-router.route("/voice/response").post( processResponse);
+router.route("/response").post( processResponse);
 
 // Get candidate data endpoint
-router.route("/voice/candidate/:id").get(getCandidate);
+router.route("/candidate/:id").get(getCandidate);
 
 export default router;

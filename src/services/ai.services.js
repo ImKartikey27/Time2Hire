@@ -26,6 +26,7 @@ class AIService{
           }
     }
     createSystemPrompt(candidateData, currentState, nextState, extractedEntities) {
+
         return PromptUtils.createSystemPrompt(candidateData, currentState, nextState, extractedEntities);
       }
 }
