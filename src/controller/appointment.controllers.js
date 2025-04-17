@@ -42,8 +42,6 @@ const createAppointment = asyncHandler(async (req, res) => {
         startTime: slot.startTime,
       },
     });
-    console.log("created an appointment");
-    
   
     return res
       .status(201)
@@ -59,7 +57,7 @@ const getAppointmentDetail = asyncHandler(async (req,res)=>{
 
 const updateAppointment = asyncHandler(async (req, res) => {
     const id = req.params.id
-    const { candidate_id, job_id, slot } = req.body
+    const { candidate_id, job_id, slot,confirmed } = req.body
     
     const appointment = await Appointment.findById(id)
     if(!appointment) throw new ApiError(404, "Appointment not found")
@@ -69,6 +67,7 @@ const updateAppointment = asyncHandler(async (req, res) => {
     if(candidate_id !== undefined) updateData.candidate_id = candidate_id
     if(job_id !== undefined) updateData.job_id = job_id
     if(slot !== undefined) updateData.slot = slot
+    if(confirmed !== undefined) updateData.confirmed = confirmed
     
     const updatedAppointment = await Appointment.findByIdAndUpdate(
       id,
