@@ -10,7 +10,7 @@ class AIService{
             apiKey: process.env.GROQ_API_KEY,
         })
     }
-    async generateResponse(message){
+    async generateResponse(messages){
         try {
             const response = await this.groq.chat.completions.create({
               model: 'llama3-8b-8192',
