@@ -3,6 +3,7 @@ import AIService from '../services/ai.services.js';
 import { STATES, getNextState } from './states.js';
 import  PromptUtils  from '../utils/prompt.utils.js';
 import Candidate from '../model/candidate.models.js';
+import {Appointment} from '../model/appointment.models.js';
 
 class VoiceAgent {
   constructor() {
@@ -169,9 +170,32 @@ class VoiceAgent {
       }
     }
     
+    console.log(extractedEntities.isConfirmed);
+    
     if (extractedEntities.isConfirmed !== undefined) {
       this.candidateData.bookingConfirmed = extractedEntities.isConfirmed;
     }
+
+    if(extractedEntities.isConfirmed && this.candidateData.interviewDateTime) {
+      const [date, time] = this.candidateData.interviewDateTime.split(' at ');
+      const appointmentExists = await Appointment.findOne({
+        candidate: this.candidateData._id
+      });
+
+      if (!appointmentExists) {
+        const newAppointment = new Appointment({
+          candidate: this.candidateData._id,
+          job: this.candidateData.job,
+          slot: {
+            date: new Date(date),
+            startTime: time.trim()
+          },
+          confirmed: true
+        });
+        await newAppointment.save();
+      }
+    }
+    
     
     // Update conversation history
     this.candidateData.conversationHistory = this.conversationHistory;

@@ -9,11 +9,12 @@ const entityPatterns = {
       //extract notice-period
       noticePeriod: /\b(\d+)\s*(day|days|week|weeks|month|months)\b/i,
 
-      //extract ctc (current and expected)
       salary: {
-        current: /\bcurrent(?:ly)?(?:\s*(?:is|:))?\s*(?:(?:Rs|INR|₹)?\s*(\d+(?:\.\d+)?(?:\s*[kK])?(?:\s*(?:lakhs|lakh|L))))/i,
-        expected: /\bexpect(?:ed|ing)?(?:\s*(?:is|:))?\s*(?:(?:Rs|INR|₹)?\s*(\d+(?:\.\d+)?(?:\s*[kK])?(?:\s*(?:lakhs|lakh|L))))/i
+        current: /\b(?:current(?:ly)?(?:\s*(?:CTC|salary|is|was|:))?\s*)(?:Rs\.?|INR|₹)?\s*(\d+(?:\.\d+)?)(?:\s*(?:[kK]|[lL](?:akhs?|acs?)?))?/i,
+      
+        expected: /\b(?:expect(?:ed|ing)?(?:\s*(?:CTC|salary|is|:))?\s*)(?:Rs\.?|INR|₹)?\s*(\d+(?:\.\d+)?)(?:\s*(?:[kK]|[lL](?:akhs?|acs?)?))?/i
       },
+      
 
       //extract dates various formats
       date: [
