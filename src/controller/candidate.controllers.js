@@ -13,7 +13,8 @@ const createCandidate = asyncHandler(async (req, res) => {
   const { 
     name, 
     company, 
-    position, 
+    position,
+    jobId,
     isInterested, 
     noticePeriod, 
     currentSalary, 
@@ -22,8 +23,8 @@ const createCandidate = asyncHandler(async (req, res) => {
   } = req.body;
   
   // Validation for required fields based on your model
-  if ([name, company, position].some((field) => field?.trim() === "")) {
-    throw new ApiError(400, "Name, company and position are required");
+  if ([name, jobId, company, position ].some((field) => field?.trim() === "")) {
+    throw new ApiError(400, "Name, JobID , company and position are required");
   }
   
   // You may want to check for existing candidates
@@ -31,8 +32,7 @@ const createCandidate = asyncHandler(async (req, res) => {
   // so I've adjusted this check to use name and company
   const existedCandidate = await Candidate.findOne({
     name: name,
-    company: company,
-    position: position
+    job: jobId
   });
   
   if (existedCandidate) {
@@ -44,6 +44,7 @@ const createCandidate = asyncHandler(async (req, res) => {
       name,
       company,
       position,
+      job: jobId,
       isInterested,
       noticePeriod,
       currentSalary,
@@ -74,6 +75,7 @@ try {
       name, 
       company, 
       position, 
+      jobId,
       isInterested, 
       noticePeriod, 
       currentSalary, 
@@ -92,6 +94,7 @@ try {
     if (name !== undefined) updateData.name = name;
     if (company !== undefined) updateData.company = company;
     if (position !== undefined) updateData.position = position;
+    if (jobId !== undefined) updateData.job = jobId;
     if (isInterested !== undefined) updateData.isInterested = isInterested;
     if (noticePeriod !== undefined) updateData.noticePeriod = noticePeriod;
     if (currentSalary !== undefined) updateData.currentSalary = currentSalary;

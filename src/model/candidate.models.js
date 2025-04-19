@@ -6,11 +6,16 @@ const candidateSchema = new mongoose.Schema({
     required: true
   },
   company: {
-    type: String,
+    type: String,//this is the name of the old company
     required: true
   },
   position: {
-    type: String,
+    type: String,//position in the old company  
+    required: true
+  },
+  job: {
+    type: Schema.Types.ObjectId,
+    ref: "Job",
     required: true
   },
   isInterested: {
