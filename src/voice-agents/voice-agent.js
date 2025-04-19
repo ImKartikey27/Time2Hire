@@ -110,11 +110,11 @@ class VoiceAgent {
       let nextPrompt = '';
       
       if (nextState === this.states.CONFIRM_BOOKING && this.candidateData.interviewDateTime) {
-        nextPrompt = PromptUtils(nextState, {
+        nextPrompt = PromptUtils.getPromptForState(nextState, {
           dateTime: this.candidateData.interviewDateTime
         });
       } else {
-        nextPrompt = PromptUtils(nextState);
+        nextPrompt = PromptUtils.getPromptForState(nextState);
       }
       
       // Add AI response to history

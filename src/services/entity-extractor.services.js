@@ -1,3 +1,4 @@
+import Dateutils from "../utils/date.utils.js";
 const entityPatterns = {
     //extract yes no responses
     yesNo: {
@@ -99,12 +100,10 @@ class EntityExtractor {
     }
 
     _parseDateFromMatch(match){
-        const Dateutils = require("../utils/date.utils.js")
         return Dateutils.parseDateFromMatch(match);
     }
 
     _parseTimeFromMatch(match){
-        const Dateutils = require("../utils/date.utils.js")
         return Dateutils.parseTimeFromMatch(match);
     }
 }

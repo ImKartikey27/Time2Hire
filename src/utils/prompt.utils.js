@@ -76,6 +76,38 @@ ${extractedEntities.isConfirmed ?
         return "continue the conversation";
     }
   }
+
+  static getPromptForState(state, contextData = {}) {
+    switch (state) {
+      case 'initial_greeting':
+        return "Hi there! I'm calling from Time2Hire regarding the position you applied for. How are you today?";
+      
+      case 'interest_check':
+        return "I wanted to confirm if you're still interested in the position we discussed?";
+      
+      case 'notice_period':
+        return "Great to hear you're interested! Could you let me know what your notice period is at your current workplace?";
+      
+      case 'salary_expectations':
+        return "Thank you for that information. May I ask about your current salary and your expectations for this role?";
+      
+      case 'availability':
+        return "Thanks for sharing that. We'd like to schedule an interview with you. Could you please let me know your availability for next week?";
+      
+      case 'confirm_booking':
+        const dateTime = contextData.dateTime || "our proposed time";
+        return `Based on your availability, we'd like to schedule the interview for ${dateTime}. Does that work for you?`;
+      
+      case 'booking_confirmed':
+        return "Excellent! I've confirmed your interview. You'll receive an email shortly with all the details. Is there anything else you'd like to know?";
+      
+      case 'farewell':
+        return "Thank you for your time today! We look forward to speaking with you soon. Have a great day!";
+      
+      default:
+        return "Is there anything else you'd like to discuss about the position?";
+    }
+  }
 }
 
 export default PromptUtils
