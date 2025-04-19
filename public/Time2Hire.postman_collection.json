@@ -412,7 +412,7 @@
 						"header": [],
 						"body": {
 							"mode": "raw",
-							"raw": "{\n    \"name\": \"Isabella Chen\",\n    \"company\": \"MetaLogic\",\n    \"position\": \"Business Analyst\"\n\n  }",
+							"raw": "{\n    \"name\": \"metal Chen\",\n    \"company\": \"MetaLogic\",\n    \"position\": \"software Developer\",\n    \"jobId\": \"67ffebcd2ebc08a434856a91\"\n  }",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -540,13 +540,13 @@
 						"method": "DELETE",
 						"header": [],
 						"url": {
-							"raw": "{{time2Hire}}candidates/delete-candidate/67ff679a1805c2b60b9c59bc",
+							"raw": "{{time2Hire}}candidates/delete-candidate/6803fb3972e51b2a11598696",
 							"host": [
 								"{{time2Hire}}candidates"
 							],
 							"path": [
 								"delete-candidate",
-								"67ff679a1805c2b60b9c59bc"
+								"6803fb3972e51b2a11598696"
 							]
 						}
 					},
@@ -1292,13 +1292,84 @@
 						"method": "POST",
 						"header": [],
 						"url": {
-							"raw": "{{time2Hire}}voice/start/67ff678d1805c2b60b9c59b8",
+							"raw": "{{time2Hire}}voice/start/6804020041ef8fae41142789",
 							"host": [
 								"{{time2Hire}}voice"
 							],
 							"path": [
 								"start",
-								"67ff678d1805c2b60b9c59b8"
+								"6804020041ef8fae41142789"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "process-conversation",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response status code is 200\", function () {",
+									"    pm.expect(pm.response.code).to.equal(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Content-Type is application/json\", function () {",
+									"    pm.expect(pm.response.headers.get(\"Content-Type\")).to.include(\"application/json\");",
+									"});",
+									"",
+									"",
+									"pm.test(\"Response time is within an acceptable range\", function () {",
+									"  pm.expect(pm.response.responseTime).to.be.below(200);",
+									"});",
+									"",
+									"",
+									"pm.test(\"Validate the data object schema\", function () {",
+									"    const responseData = pm.response.json();",
+									"",
+									"    pm.expect(responseData.data).to.be.an('object');",
+									"    pm.expect(responseData.data.message).to.be.a('string');",
+									"    pm.expect(responseData.data.state).to.be.a('string');",
+									"    pm.expect(responseData.data.extractedEntities).to.be.an('object');",
+									"    pm.expect(responseData.data.done).to.be.a('boolean');",
+									"    pm.expect(responseData.data.candidateId).to.be.a('string');",
+									"});",
+									"",
+									"",
+									"pm.test(\"Success is a boolean value\", function () {",
+									"  const responseData = pm.response.json();",
+									"  ",
+									"  pm.expect(responseData).to.be.an('object');",
+									"  pm.expect(responseData.success).to.be.a('boolean');",
+									"});",
+									""
+								],
+								"type": "text/javascript",
+								"packages": {}
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"userInput\": \"yes\",\n    \"candidateId\": \"6804020041ef8fae41142789\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{time2Hire}}voice/response",
+							"host": [
+								"{{time2Hire}}voice"
+							],
+							"path": [
+								"response"
 							]
 						}
 					},

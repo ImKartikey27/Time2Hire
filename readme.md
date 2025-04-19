@@ -124,6 +124,19 @@ gulp watch
 - `PUT /api/appointments/:id` - Update appointment inform
 - `DELETE /api/appointments/:id` - Cancel an appointment
 
+### Jobs
+
+- `GET /get-jobs`: Get a list of all job openings.
+- `GET /get-job/:id`: Get details of a specific job opening.
+- `POST /create-job`: Create a new job (Secured route, JWT required).
+- `PUT /update-job/:id`: Update a job listing (Secured route, JWT required).
+- `DELETE /delete-job/:id`: Delete a job listing (Secured route, JWT required).
+
+### Voice Commands
+
+- `POST /start/:id`: Start a conversation with a candidate using their `id`.
+- `POST /response`: Process a response from the candidate during the conversation.
+
 
 ## Contributing
 
